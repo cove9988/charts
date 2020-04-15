@@ -27,11 +27,15 @@ spec:
   ports:
     - port: {{ .Values.WebUi.ServicePort }}
       targetPort: {{ .Values.WebUi.ContainerPort }}
+      name: "web-port"
+    - port: {{ .Values.Master.ServicePort }}
+      targetPort: {{ .Values.Master.ServicePort }}
+      name: "spark-port"
   selector:
     component: "{{ .Release.Name }}-{{ .Values.Master.Component }}"
   type: {{ .Values.Master.ServiceType }}
 ---
-apiVersion: {{ template "deployment.apiVersion" . }}
+apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: {{ template "master-fullname" . }}
