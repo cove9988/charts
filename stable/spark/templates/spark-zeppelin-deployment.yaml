@@ -1,3 +1,4 @@
+{{- if .Values.Zeppelin.Enabled }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -16,7 +17,7 @@ spec:
     component: "{{ .Release.Name }}-{{ .Values.Zeppelin.Component }}"
   type: {{ .Values.Zeppelin.ServiceType }}
 ---
-apiVersion: {{ template "deployment.apiVersion" . }}
+apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: {{ template "zeppelin-fullname" . }}
@@ -49,6 +50,7 @@ spec:
           resources:
             requests:
               cpu: "{{ .Values.Zeppelin.Cpu }}"
+              memory: "{{ .Values.Zeppelin.Memory }}"
           env:
             - name: SPARK_MASTER
               value: "spark://{{ template "master-fullname" . }}:{{ .Values.Master.ServicePort }}"
@@ -72,3 +74,4 @@ spec:
           persistentVolumeClaim:
             claimName: {{ template "zeppelin-fullname" . }}-notebook
         {{- end }}
+{{- end }}
